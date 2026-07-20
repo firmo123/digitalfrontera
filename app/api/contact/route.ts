@@ -1,0 +1,52 @@
+import { NextResponse } from "next/server";
+
+export async function POST(request: Request) {
+  try {
+    const body = await request.json();
+    const { name, email, business, website, message, referral } = body;
+
+    if (!name || !email || !message) {
+      return NextResponse.json(
+        { error: "Name, email, and message are required." },
+        { status: 400 }
+      );
+    }
+
+    const apiKey = process.env.RESEND_API_KEY;
+    if (!apiKey) {
+      console.error("RESEND_API_KEY is not set");
+      return NextResponse.json(
+        { error: "Email service is not configured." },
+        { status: 500 }
+      );
+    }
+
+    const { Resend } = await import("resend");
+    const resend = new Resend(apiKey);
+
+    await resend.emails.send({
+      from: "Digital Frontera <contact@digitalfrontera.com>",
+      to: "info@digitalfrontera.com",
+      replyTo: email,
+      subject: `New enquiry from ${name}`,
+      text: [
+        `Name: ${name}`,
+        `Email: ${email}`,
+        business ? `Business: ${business}` : null,
+        website ? `Website: ${website}` : null,
+        `\nMessage:\n${message}`,
+        referral ? `\nReferral: ${referral}` : null,
+      ]
+        .filter(Boolean)
+        .join("\n"),
+    });
+
+    return NextResponse.json({ success: true });
+  } catch (error) {
+    console.error("Contact form error:", error);
+    return NextResponse.json(
+      { error: "Failed to send message. Please try again." },
+      { status: 500 }
+    );
+  }
+}

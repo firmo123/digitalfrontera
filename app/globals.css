@@ -1,0 +1,128 @@
+@import "tailwindcss";
+
+@theme inline {
+  --color-background: #0A0A0A;
+  --color-foreground: #FAFAFA;
+  --color-muted: #A1A1A1;
+  --color-accent: #BE3F12;
+  --color-card: #141414;
+  --color-border: #262626;
+
+  --font-heading: "Instrument Serif", serif;
+  --font-body: "Inter", sans-serif;
+}
+
+body {
+  background: var(--color-background);
+  color: var(--color-foreground);
+  font-family: var(--font-body);
+  overflow-x: hidden;
+}
+
+::selection {
+  background: var(--color-accent);
+  color: var(--color-foreground);
+}
+
+/* Lenis is the sole smooth-scroll mechanism — no CSS scroll-behavior */
+
+/* Hide scrollbar for drag sections */
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;
+}
+.scrollbar-hide {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
+}
+::-webkit-scrollbar-track {
+  background: var(--color-background);
+}
+::-webkit-scrollbar-thumb {
+  background: var(--color-border);
+  border-radius: 3px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: var(--color-muted);
+}
+
+/* Body text max width */
+.prose-body {
+  max-width: 65ch;
+  color: var(--color-muted);
+  line-height: 1.7;
+}
+
+/* Underline slide-in for links */
+.link-underline {
+  position: relative;
+  display: inline-block;
+}
+.link-underline::after {
+  content: "";
+  position: absolute;
+  bottom: -2px;
+  left: 0;
+  width: 0;
+  height: 1px;
+  background: currentColor;
+  transition: width 0.3s ease;
+}
+.link-underline:hover::after {
+  width: 100%;
+}
+
+/* Cream inverted section */
+.section-cream {
+  background: #F5F1E8;
+  color: #0A0A0A;
+}
+.section-cream .text-foreground {
+  color: #0A0A0A;
+}
+.section-cream .text-muted {
+  color: #555;
+}
+.section-cream .border-border {
+  border-color: #D5D0C8;
+}
+.section-cream .bg-card {
+  background: #EDE9E0;
+}
+.section-cream ::selection {
+  color: #F5F1E8;
+}
+
+/* Marquee ticker */
+@keyframes marquee {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
+.marquee-track {
+  display: inline-flex;
+  animation: marquee 25s linear infinite;
+  will-change: transform;
+}
+
+/* Dot grid for selected sections */
+.bg-grid {
+  background-image: radial-gradient(circle, #1A1A1A 1px, transparent 1px);
+  background-size: 64px 64px;
+}
+
+
+/* Reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important; /* override any UA smooth scroll */
+  }
+}
