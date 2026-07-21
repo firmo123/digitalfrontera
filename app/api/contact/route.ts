@@ -28,7 +28,7 @@ export async function POST(request: Request) {
 
     console.log("Sending email to info@digitalfrontera.com");
     const { data, error: resendError } = await resend.emails.send({
-      from: "Digital Frontera <info@digitalfrontera.com>",
+      from: "Digital Frontera <onboarding@resend.dev>",
       to: "info@digitalfrontera.com",
       replyTo: email,
       subject: `New enquiry from ${name}`,
