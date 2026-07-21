@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 
 export async function POST(request: Request) {
+  console.log("API called");
   try {
     const body = await request.json();
     const { name, email, business, website, message, referral } = body;
@@ -13,6 +14,7 @@ export async function POST(request: Request) {
     }
 
     const apiKey = process.env.RESEND_API_KEY;
+    console.log("API Key:", apiKey);
     if (!apiKey) {
       console.error("RESEND_API_KEY is not set");
       return NextResponse.json(
@@ -24,7 +26,8 @@ export async function POST(request: Request) {
     const { Resend } = await import("resend");
     const resend = new Resend(apiKey);
 
-    await resend.emails.send({
+    console.log("Sending email to info@digitalfrontera.com");
+    const response = await resend.emails.send({
       from: "Digital Frontera <contact@digitalfrontera.com>",
       to: "info@digitalfrontera.com",
       replyTo: email,
@@ -40,6 +43,7 @@ export async function POST(request: Request) {
         .filter(Boolean)
         .join("\n"),
     });
+    console.log("Response:", response);
 
     return NextResponse.json({ success: true });
   } catch (error) {

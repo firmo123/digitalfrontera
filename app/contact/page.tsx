@@ -97,11 +97,9 @@ export default function Contact() {
               <FadeIn delay={0.15}>
                 {status === "success" ? (
                   <div className="bg-card border border-accent p-8 md:p-12">
-                    <h2 className="font-heading text-[1.5rem] md:text-[2rem] mb-3">
-                      Message sent.
-                    </h2>
                     <p className="text-muted text-base leading-[1.7]">
-                      We&apos;ll get back to you within a working day.
+                      Thanks for the message, we&apos;ll get back to you very
+                      soon.
                     </p>
                     <button
                       onClick={() => setStatus("idle")}
