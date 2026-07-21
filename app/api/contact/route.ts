@@ -27,7 +27,7 @@ export async function POST(request: Request) {
     const resend = new Resend(apiKey);
 
     console.log("Sending email to info@digitalfrontera.com");
-    const response = await resend.emails.send({
+    const { data, error: resendError } = await resend.emails.send({
       from: "Digital Frontera <contact@digitalfrontera.com>",
       to: "info@digitalfrontera.com",
       replyTo: email,
@@ -43,8 +43,16 @@ export async function POST(request: Request) {
         .filter(Boolean)
         .join("\n"),
     });
-    console.log("Response:", response);
 
+    if (resendError) {
+      console.error("Resend error:", resendError);
+      return NextResponse.json(
+        { error: "Failed to send message. Please try again." },
+        { status: 500 }
+      );
+    }
+
+    console.log("Email sent successfully:", data);
     return NextResponse.json({ success: true });
   } catch (error) {
     console.error("Contact form error:", error);

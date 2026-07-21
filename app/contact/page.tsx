@@ -17,28 +17,35 @@ export default function Contact() {
   const [errorMessage, setErrorMessage] = useState("");
 
   async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
+    console.log("Form submitted");
     e.preventDefault();
     setStatus("sending");
     setErrorMessage("");
 
     const form = e.currentTarget;
     const data = Object.fromEntries(new FormData(form));
+    console.log("Form data:", data);
 
     try {
+      console.log("Fetching /api/contact...");
       const res = await fetch("/api/contact", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(data),
       });
+      console.log("Fetch response:", res.status, res.statusText);
 
       if (!res.ok) {
         const body = await res.json().catch(() => null);
         throw new Error(body?.error || "Something went wrong.");
       }
 
+      const responseBody = await res.json();
+      console.log("Response body:", responseBody);
       setStatus("success");
       form.reset();
     } catch (err) {
+      console.error("Form error:", err);
       setStatus("error");
       setErrorMessage(
         err instanceof Error ? err.message : "Something went wrong."
